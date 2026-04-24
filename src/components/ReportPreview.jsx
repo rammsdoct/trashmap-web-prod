@@ -1,6 +1,6 @@
 import { getPinColor, getStatusLabel } from "../lib/helpers";
 
-export default function ReportPreview({ report, reports, onClose, onNavigate }) {
+export default function ReportPreview({ report, reports, onClose, onNavigate, onOpenDetail }) {
   const idx = reports.findIndex((r) => r.id === report.id);
   const total = reports.length;
   const hasPrev = idx > 0;

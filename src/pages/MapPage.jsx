@@ -2,9 +2,11 @@ import { useState, useCallback, useRef } from "react";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 import { GOOGLE_MAPS_API_KEY } from "../lib/config";
 import { useReports } from "../hooks/useReports";
+import { useAdmin } from "../hooks/useAdmin";
 import { getPinColor } from "../lib/helpers";
 import FilterChips from "../components/FilterChips";
 import ReportPreview from "../components/ReportPreview";
+import ReportDetail from "../components/ReportDetail";
 
 const DEFAULT_CENTER = { lat: 19.6218807, lng: -101.2552132 };
 const DEFAULT_ZOOM = 14;
@@ -32,7 +34,9 @@ export default function MapPage() {
     setActiveFilter,
   } = useReports();
 
+  const { isAdmin } = useAdmin();
   const [selectedReport, setSelectedReport] = useState(null);
+  const [detailReport, setDetailReport] = useState(null);
   const mapRef = useRef(null);
 
   const onMapLoad = useCallback((map) => {
@@ -55,6 +59,7 @@ export default function MapPage() {
   };
 
   const handleMarkerClick = useCallback((report) => {
+    setDetailReport(null);
     setSelectedReport(report);
     mapRef.current?.panTo({ lat: report.latitude, lng: report.longitude });
   }, []);
@@ -63,6 +68,24 @@ export default function MapPage() {
     setSelectedReport(report);
     mapRef.current?.panTo({ lat: report.latitude, lng: report.longitude });
   }, []);
+
+  const handleDetailNavigate = useCallback((report) => {
+    setDetailReport(report);
+    setSelectedReport(report);
+    mapRef.current?.panTo({ lat: report.latitude, lng: report.longitude });
+  }, []);
+
+  const handleUpdated = useCallback((updated) => {
+    setDetailReport((prev) => (prev ? { ...prev, ...updated } : updated));
+    setSelectedReport((prev) => (prev ? { ...prev, ...updated } : updated));
+    refresh();
+  }, [refresh]);
+
+  const handleDeleted = useCallback(() => {
+    setDetailReport(null);
+    setSelectedReport(null);
+    refresh();
+  }, [refresh]);
 
   if (loadError) {
     return (
@@ -164,13 +187,27 @@ export default function MapPage() {
         {activeFilter !== "all" && " filtrados"}
       </div>
 
-      {/* Report preview panel */}
-      {selectedReport && (
+      {/* Report preview panel (pin clicked but detail not yet open) */}
+      {selectedReport && !detailReport && (
         <ReportPreview
           report={selectedReport}
           reports={filteredReports}
           onClose={() => setSelectedReport(null)}
           onNavigate={handleNavigate}
+          onOpenDetail={() => setDetailReport(selectedReport)}
+        />
+      )}
+
+      {/* Report detail drawer (full info + actions) */}
+      {detailReport && (
+        <ReportDetail
+          report={detailReport}
+          reports={filteredReports}
+          isAdmin={isAdmin}
+          onClose={() => setDetailReport(null)}
+          onUpdated={handleUpdated}
+          onDeleted={handleDeleted}
+          onNavigate={handleDetailNavigate}
         />
       )}
     </div>
