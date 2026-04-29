@@ -355,18 +355,18 @@ export default function ReportDetail({
             <button
               disabled={acting}
               onClick={adminValidate}
-              className="w-full py-2.5 bg-[#2563EB] hover:bg-[#1D4ED8] disabled:opacity-40 text-white text-sm font-semibold rounded-xl transition-all active:scale-95"
+              className="w-full py-2.5 bg-[#2563EB] hover:bg-[#1D4ED8] disabled:opacity-40 text-white text-sm font-semibold rounded-xl transition-all active:scale-95 touch-target"
             >
               {acting ? "Validando…" : "✅ Validar (+ puntos)"}
             </button>
           )}
 
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             {status !== "open" && (
               <button
                 disabled={acting}
                 onClick={adminReopen}
-                className="flex-1 py-2 bg-[#F59E0B] hover:bg-[#D97706] disabled:opacity-40 text-white text-sm font-semibold rounded-xl transition-all active:scale-95"
+                className="flex-1 py-2.5 bg-[#F59E0B] hover:bg-[#D97706] disabled:opacity-40 text-white text-sm font-semibold rounded-xl transition-all active:scale-95 touch-target"
               >
                 {acting ? "…" : "🔄 Re-abrir"}
               </button>
@@ -376,22 +376,22 @@ export default function ReportDetail({
               <button
                 disabled={acting}
                 onClick={() => setConfirmDelete(true)}
-                className="flex-1 py-2 bg-red-500 hover:bg-red-600 disabled:opacity-40 text-white text-sm font-semibold rounded-xl transition-all active:scale-95"
+                className="flex-1 py-2.5 bg-red-500 hover:bg-red-600 disabled:opacity-40 text-white text-sm font-semibold rounded-xl transition-all active:scale-95 touch-target"
               >
                 🗑 Eliminar
               </button>
             ) : (
-              <div className="flex-1 flex gap-1.5">
+              <div className="flex-1 flex flex-col sm:flex-row gap-1.5">
                 <button
                   disabled={acting}
                   onClick={adminDelete}
-                  className="flex-1 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl transition"
+                  className="flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl transition touch-target"
                 >
                   {acting ? "…" : "Confirmar"}
                 </button>
                 <button
                   onClick={() => setConfirmDelete(false)}
-                  className="flex-1 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold rounded-xl transition"
+                  className="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold rounded-xl transition touch-target"
                 >
                   Cancelar
                 </button>
@@ -412,38 +412,38 @@ export default function ReportDetail({
       />
 
       {/* Desktop: right-side drawer */}
-      <div className="hidden md:flex fixed right-0 top-14 bottom-0 w-96 bg-white shadow-2xl z-30 flex-col slide-in-right">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 flex-shrink-0">
+      <div className="hidden md:flex fixed right-0 top-14 bottom-0 w-full md:w-96 lg:w-96 bg-white shadow-2xl z-30 flex-col slide-in-right">
+        <div className="flex items-center justify-between px-4 sm:px-5 py-4 border-b border-gray-100 flex-shrink-0">
           <h2 className="font-bold text-gray-900 text-sm tracking-tight">
             Detalle del reporte
           </h2>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 text-sm transition"
+            className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 text-sm transition touch-target"
           >
             ✕
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto px-5 py-4 no-scrollbar">
+        <div className="flex-1 overflow-y-auto px-4 sm:px-5 py-4 no-scrollbar">
           {content}
         </div>
       </div>
 
       {/* Mobile: expandable bottom sheet */}
-      <div className="md:hidden fixed bottom-0 inset-x-0 bg-white rounded-t-2xl shadow-2xl z-30 max-h-[90dvh] flex flex-col slide-up">
-        <div className="relative flex items-center justify-between px-5 pt-4 pb-3 border-b border-gray-100 flex-shrink-0">
+      <div className="md:hidden fixed bottom-0 inset-x-0 bg-white rounded-t-3xl shadow-2xl z-30 max-h-[90dvh] flex flex-col slide-up overflow-hidden">
+        <div className="relative flex items-center justify-between px-4 pt-4 pb-3 border-b border-gray-100 flex-shrink-0">
           <div className="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-1 bg-gray-200 rounded-full" />
           <h2 className="font-bold text-gray-900 text-sm tracking-tight mt-1">
             Detalle del reporte
           </h2>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 text-sm transition mt-1"
+            className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 text-sm transition mt-1 touch-target"
           >
             ✕
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto px-5 py-4 no-scrollbar">
+        <div className="flex-1 overflow-y-auto px-4 py-4 no-scrollbar">
           {content}
         </div>
       </div>
