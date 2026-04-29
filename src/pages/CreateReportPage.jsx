@@ -11,8 +11,8 @@ const mapContainerStyle = {
 };
 
 const defaultCenter = {
-  lat: -34.9011,
-  lng: -56.1645,
+  lat: 19.6218807,
+  lng: -101.2552132,
 };
 
 export default function CreateReportPage() {
@@ -140,7 +140,7 @@ export default function CreateReportPage() {
 
   if (!isLoaded) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-[calc(100vh-3.5rem)]">
         <div className="text-center">
           <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
             <span className="text-2xl animate-spin">⏳</span>
