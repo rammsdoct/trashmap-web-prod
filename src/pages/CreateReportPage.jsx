@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 import { API_BASE } from "../lib/config";
-import { axiosInstance } from "../lib/api";
+import api from "../lib/api";
 
 const mapContainerStyle = {
   width: "100%",
@@ -108,7 +108,7 @@ export default function CreateReportPage() {
           email: user?.email,
         };
 
-        const response = await axiosInstance.post(
+        const response = await api.post(
           `${API_BASE}/reports`,
           payload
         );
