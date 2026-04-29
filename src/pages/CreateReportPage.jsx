@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
-import { API_BASE } from "../lib/config";
+import { API_BASE, GOOGLE_MAPS_API_KEY } from "../lib/config";
 import api from "../lib/api";
 
 const mapContainerStyle = {
@@ -30,9 +30,16 @@ export default function CreateReportPage() {
   const mapRef = useRef(null);
   const markerRef = useRef(null);
 
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+  const { isLoaded, loadError } = useJsApiLoader({
+    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
   });
+
+  // Debug: log loading state
+  useEffect(() => {
+    if (loadError) {
+      console.error("Google Maps load error:", loadError);
+    }
+  }, [loadError]);
 
   // Get user's current location
   useEffect(() => {
@@ -138,7 +145,9 @@ export default function CreateReportPage() {
           <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
             <span className="text-2xl animate-spin">⏳</span>
           </div>
-          <p className="text-gray-600">Cargando mapa...</p>
+          <p className="text-gray-600">
+            {loadError ? `Error cargando mapa: ${loadError.message}` : "Cargando mapa..."}
+          </p>
         </div>
       </div>
     );
