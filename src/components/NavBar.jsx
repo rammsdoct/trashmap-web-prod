@@ -40,25 +40,29 @@ export default function NavBar() {
           🗺️ Mapa
         </button>
 
-        <button
-          onClick={() => navigate("/create")}
-          className={`px-3 py-2 text-xs sm:text-sm font-medium rounded-lg transition touch-target bg-green-500 hover:bg-green-600 text-white ${
-            isActive("/create") ? "ring-2 ring-green-700" : ""
-          }`}
-        >
-          ➕ Reportar
-        </button>
+        {user && (
+          <button
+            onClick={() => navigate("/create")}
+            className={`px-3 py-2 text-xs sm:text-sm font-medium rounded-lg transition touch-target bg-green-500 hover:bg-green-600 text-white ${
+              isActive("/create") ? "ring-2 ring-green-700" : ""
+            }`}
+          >
+            ➕ Reportar
+          </button>
+        )}
 
-        <button
-          onClick={() => navigate("/tickets")}
-          className={`px-3 py-2 text-xs sm:text-sm font-medium rounded-lg transition touch-target ${
-            isActive("/tickets")
-              ? "bg-gray-100 text-gray-900"
-              : "text-gray-600 hover:bg-gray-50"
-          }`}
-        >
-          🎫 Tickets
-        </button>
+        {user && (
+          <button
+            onClick={() => navigate("/tickets")}
+            className={`px-3 py-2 text-xs sm:text-sm font-medium rounded-lg transition touch-target ${
+              isActive("/tickets")
+                ? "bg-gray-100 text-gray-900"
+                : "text-gray-600 hover:bg-gray-50"
+            }`}
+          >
+            🎫 Tickets
+          </button>
+        )}
 
         <button
           onClick={() => navigate("/scoreboard")}
@@ -85,26 +89,30 @@ export default function NavBar() {
           🗺️
         </button>
 
-        <button
-          onClick={() => navigate("/create")}
-          className={`w-8 h-8 flex items-center justify-center text-lg rounded-lg transition bg-green-500 hover:bg-green-600 text-white ${
-            isActive("/create") ? "ring-2 ring-green-700" : ""
-          }`}
-          title="Nuevo reporte"
-        >
-          ➕
-        </button>
+        {user && (
+          <button
+            onClick={() => navigate("/create")}
+            className={`w-8 h-8 flex items-center justify-center text-lg rounded-lg transition bg-green-500 hover:bg-green-600 text-white ${
+              isActive("/create") ? "ring-2 ring-green-700" : ""
+            }`}
+            title="Nuevo reporte"
+          >
+            ➕
+          </button>
+        )}
 
-        <button
-          onClick={() => navigate("/tickets")}
-          className={`w-8 h-8 flex items-center justify-center text-lg rounded-lg transition ${
-            isActive("/tickets")
-              ? "bg-gray-100 text-gray-900"
-              : "text-gray-600 hover:bg-gray-50"
-          }`}
-        >
-          🎫
-        </button>
+        {user && (
+          <button
+            onClick={() => navigate("/tickets")}
+            className={`w-8 h-8 flex items-center justify-center text-lg rounded-lg transition ${
+              isActive("/tickets")
+                ? "bg-gray-100 text-gray-900"
+                : "text-gray-600 hover:bg-gray-50"
+            }`}
+          >
+            🎫
+          </button>
+        )}
 
         <button
           onClick={() => navigate("/scoreboard")}
@@ -118,48 +126,64 @@ export default function NavBar() {
         </button>
       </nav>
 
-      {/* User avatar + profile */}
-      <button
-        onClick={() => navigate("/profile")}
-        className={`flex items-center gap-2 rounded-full px-2 sm:px-3 py-2 transition text-sm touch-target ${
-          isActive("/profile")
-            ? "bg-gray-100 text-gray-900"
-            : "text-gray-700 hover:bg-gray-50"
-        }`}
-      >
-        {user?.photoURL ? (
+      {/* Authenticated: avatar + signout */}
+      {user ? (
+        <>
+          <button
+            onClick={() => navigate("/profile")}
+            className={`flex items-center gap-2 rounded-full px-2 sm:px-3 py-2 transition text-sm touch-target ${
+              isActive("/profile")
+                ? "bg-gray-100 text-gray-900"
+                : "text-gray-700 hover:bg-gray-50"
+            }`}
+          >
+            {user.photoURL ? (
+              <img
+                src={user.photoURL}
+                alt={user.displayName}
+                className="w-7 h-7 rounded-full border border-gray-200 flex-shrink-0"
+              />
+            ) : (
+              <div className="w-7 h-7 rounded-full bg-[#10B981] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                {initial}
+              </div>
+            )}
+            <span className="hidden sm:block max-w-[120px] truncate font-medium text-xs sm:text-sm">
+              {user.displayName ?? user.email ?? "Usuario"}
+            </span>
+          </button>
+
+          <button
+            onClick={handleSignOut}
+            className="text-xs text-gray-400 hover:text-red-500 transition px-2 sm:px-3 py-2 rounded-lg hover:bg-red-50 touch-target hidden sm:block"
+            title="Cerrar sesión"
+          >
+            Salir
+          </button>
+
+          <button
+            onClick={handleSignOut}
+            className="sm:hidden text-lg hover:text-red-500 transition flex-shrink-0"
+            title="Cerrar sesión"
+          >
+            🚪
+          </button>
+        </>
+      ) : (
+        /* Guest: Login button */
+        <button
+          onClick={() => navigate("/login")}
+          className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-[#10B981] hover:bg-[#059669] text-white text-xs sm:text-sm font-semibold transition touch-target"
+        >
           <img
-            src={user.photoURL}
-            alt={user.displayName}
-            className="w-7 h-7 rounded-full border border-gray-200 flex-shrink-0"
+            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+            alt="Google"
+            className="w-4 h-4"
           />
-        ) : (
-          <div className="w-7 h-7 rounded-full bg-[#10B981] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-            {initial}
-          </div>
-        )}
-        <span className="hidden sm:block max-w-[120px] truncate font-medium text-xs sm:text-sm">
-          {user?.displayName ?? user?.email ?? "Usuario"}
-        </span>
-      </button>
-
-      {/* Sign out */}
-      <button
-        onClick={handleSignOut}
-        className="text-xs text-gray-400 hover:text-red-500 transition px-2 sm:px-3 py-2 rounded-lg hover:bg-red-50 touch-target hidden sm:block"
-        title="Cerrar sesión"
-      >
-        Salir
-      </button>
-
-      {/* Mobile sign out icon */}
-      <button
-        onClick={handleSignOut}
-        className="sm:hidden text-lg hover:text-red-500 transition flex-shrink-0"
-        title="Cerrar sesión"
-      >
-        🚪
-      </button>
+          <span className="hidden sm:inline">Entrar</span>
+          <span className="sm:hidden">Entrar</span>
+        </button>
+      )}
     </header>
   );
 }

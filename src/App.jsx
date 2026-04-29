@@ -17,25 +17,22 @@ function AppRoutes() {
   // Firebase still resolving auth state
   if (user === undefined) return <LoadingScreen />;
 
-  // Not logged in
-  if (!user) return <LoginPage />;
-
-  // Logged in — full app shell
+  // Map and scoreboard are public — login required only for write/personal routes
   return (
     <div className="flex flex-col min-h-screen">
       <NavBar />
       <main className="flex-1 pt-14">
         <Routes>
-          <Route path="/" element={<MapPage />} />
-          <Route path="/create" element={<CreateReportPage />} />
-          <Route path="/tickets" element={<TicketsPage />} />
+          <Route path="/"           element={<MapPage />} />
           <Route path="/scoreboard" element={<ScoreboardPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="/login"      element={user ? <Navigate to="/" replace /> : <LoginPage />} />
+          <Route path="/create"     element={user ? <CreateReportPage />  : <Navigate to="/login" replace />} />
+          <Route path="/tickets"    element={user ? <TicketsPage />       : <Navigate to="/login" replace />} />
+          <Route path="/profile"    element={user ? <ProfilePage />       : <Navigate to="/login" replace />} />
+          <Route path="*"           element={<Navigate to="/" replace />} />
         </Routes>
       </main>
 
-      {/* Offline banner */}
       <OfflineBanner />
     </div>
   );
