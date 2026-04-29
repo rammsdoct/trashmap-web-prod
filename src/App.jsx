@@ -6,6 +6,7 @@ import LoadingScreen from "./components/LoadingScreen";
 import OfflineBanner from "./components/OfflineBanner";
 import LoginPage from "./pages/LoginPage";
 import MapPage from "./pages/MapPage";
+import CreateReportPage from "./pages/CreateReportPage";
 import TicketsPage from "./pages/TicketsPage";
 import ScoreboardPage from "./pages/ScoreboardPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -26,6 +27,7 @@ function AppRoutes() {
       <main className="flex-1 pt-14">
         <Routes>
           <Route path="/" element={<MapPage />} />
+          <Route path="/create" element={<CreateReportPage />} />
           <Route path="/tickets" element={<TicketsPage />} />
           <Route path="/scoreboard" element={<ScoreboardPage />} />
           <Route path="/profile" element={<ProfilePage />} />
