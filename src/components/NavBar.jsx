@@ -41,6 +41,15 @@ export default function NavBar() {
         </button>
 
         <button
+          onClick={() => navigate("/create")}
+          className={`px-3 py-2 text-xs sm:text-sm font-medium rounded-lg transition touch-target bg-green-500 hover:bg-green-600 text-white ${
+            isActive("/create") ? "ring-2 ring-green-700" : ""
+          }`}
+        >
+          ➕ Reportar
+        </button>
+
+        <button
           onClick={() => navigate("/tickets")}
           className={`px-3 py-2 text-xs sm:text-sm font-medium rounded-lg transition touch-target ${
             isActive("/tickets")
@@ -74,6 +83,16 @@ export default function NavBar() {
           }`}
         >
           🗺️
+        </button>
+
+        <button
+          onClick={() => navigate("/create")}
+          className={`w-8 h-8 flex items-center justify-center text-lg rounded-lg transition bg-green-500 hover:bg-green-600 text-white ${
+            isActive("/create") ? "ring-2 ring-green-700" : ""
+          }`}
+          title="Nuevo reporte"
+        >
+          ➕
         </button>
 
         <button
