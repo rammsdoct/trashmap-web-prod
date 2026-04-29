@@ -28,7 +28,7 @@ function PhotoStage({ label, photo }) {
       <img
         src={`data:image/jpeg;base64,${b64}`}
         alt={label}
-        className="w-full h-44 object-cover rounded-xl"
+        className="w-full h-40 sm:h-44 object-cover rounded-xl"
       />
     </div>
   );
@@ -38,11 +38,11 @@ function FileUpload({ label, onSelect, preview, onClear }) {
   const ref = useRef(null);
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <button
           type="button"
           onClick={() => ref.current?.click()}
-          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-500 hover:border-[#10B981] hover:text-[#10B981] transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-500 hover:border-[#10B981] hover:text-[#10B981] transition-colors touch-target"
         >
           📷 {label}
         </button>
@@ -50,7 +50,7 @@ function FileUpload({ label, onSelect, preview, onClear }) {
           <button
             type="button"
             onClick={onClear}
-            className="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-500 text-xs font-semibold rounded-xl transition"
+            className="px-3 py-2.5 bg-red-50 hover:bg-red-100 text-red-500 text-xs font-semibold rounded-xl transition touch-target"
           >
             Quitar
           </button>
@@ -233,14 +233,14 @@ export default function ReportDetail({
           <button
             disabled={!hasPrev}
             onClick={() => navigate(-1)}
-            className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center text-base leading-none transition"
+            className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center text-base leading-none transition touch-target"
           >
             ‹
           </button>
           <button
             disabled={!hasNext}
             onClick={() => navigate(1)}
-            className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center text-base leading-none transition"
+            className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center text-base leading-none transition touch-target"
           >
             ›
           </button>
@@ -305,7 +305,7 @@ export default function ReportDetail({
           <button
             disabled={acting || !stagePhoto}
             onClick={() => updateStage("in_progress")}
-            className="w-full py-2.5 bg-[#F59E0B] hover:bg-[#D97706] disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition-all active:scale-95"
+            className="w-full py-2.5 bg-[#F59E0B] hover:bg-[#D97706] disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition-all active:scale-95 touch-target"
           >
             {acting ? "Actualizando…" : "Marcar en progreso"}
           </button>
@@ -333,7 +333,7 @@ export default function ReportDetail({
           <button
             disabled={acting || !stagePhoto}
             onClick={() => updateStage("closed")}
-            className="w-full py-2.5 bg-[#6B7280] hover:bg-[#4B5563] disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition-all active:scale-95"
+            className="w-full py-2.5 bg-[#6B7280] hover:bg-[#4B5563] disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition-all active:scale-95 touch-target"
           >
             {acting ? "Cerrando…" : "Cerrar reporte"}
           </button>

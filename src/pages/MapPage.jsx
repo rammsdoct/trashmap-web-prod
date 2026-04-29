@@ -107,109 +107,112 @@ export default function MapPage() {
   }
 
   return (
-    <div className="relative h-[calc(100vh-3.5rem)] overflow-hidden">
-      {/* Filter chips — absolute top */}
-      <FilterChips
-        activeFilter={activeFilter}
-        onFilterChange={setActiveFilter}
-        statusCounts={statusCounts}
-        totalCount={reports.length}
-      />
+    <div className="relative h-[calc(100vh-3.5rem)] overflow-hidden flex flex-col lg:flex-row">
+      {/* Map container */}
+      <div className="flex-1 relative min-h-[300px] lg:min-h-auto">
+        {/* Filter chips — absolute top */}
+        <FilterChips
+          activeFilter={activeFilter}
+          onFilterChange={setActiveFilter}
+          statusCounts={statusCounts}
+          totalCount={reports.length}
+        />
 
-      {/* Loading toast */}
-      {loading && (
-        <div className="absolute top-14 left-1/2 -translate-x-1/2 z-20 bg-white/95 px-4 py-2 rounded-full shadow-md text-xs text-gray-600 flex items-center gap-2 pointer-events-none">
-          <div className="w-3 h-3 border-2 border-[#10B981] border-t-transparent rounded-full animate-spin" />
-          Cargando reportes…
-        </div>
-      )}
+        {/* Loading toast */}
+        {loading && (
+          <div className="absolute top-14 left-1/2 -translate-x-1/2 z-20 bg-white/95 px-4 py-2 rounded-full shadow-md text-xs text-gray-600 flex items-center gap-2 pointer-events-none">
+            <div className="w-3 h-3 border-2 border-[#10B981] border-t-transparent rounded-full animate-spin" />
+            Cargando reportes…
+          </div>
+        )}
 
-      {/* Error toast */}
-      {error && !loading && (
-        <div className="absolute top-14 left-1/2 -translate-x-1/2 z-20 bg-red-50 border border-red-200 px-4 py-2 rounded-full shadow text-xs text-red-600 flex items-center gap-2">
-          <span>⚠️</span>
-          Sin conexión —{" "}
-          <button onClick={refresh} className="underline font-semibold">
-            reintentar
+        {/* Error toast */}
+        {error && !loading && (
+          <div className="absolute top-14 left-1/2 -translate-x-1/2 z-20 bg-red-50 border border-red-200 px-4 py-2 rounded-full shadow text-xs text-red-600 flex items-center gap-2">
+            <span>⚠️</span>
+            Sin conexión —{" "}
+            <button onClick={refresh} className="underline font-semibold">
+              reintentar
+            </button>
+          </div>
+        )}
+
+        {/* Google Map */}
+        <GoogleMap
+          mapContainerStyle={{ width: "100%", height: "100%" }}
+          center={DEFAULT_CENTER}
+          zoom={DEFAULT_ZOOM}
+          options={MAP_OPTIONS}
+          onLoad={onMapLoad}
+          onUnmount={onMapUnmount}
+          onClick={() => setSelectedReport(null)}
+        >
+          {filteredReports.map((r) => (
+            <Marker
+              key={r.id}
+              position={{ lat: r.latitude, lng: r.longitude }}
+              icon={{
+                path: window.google.maps.SymbolPath.CIRCLE,
+                scale: selectedReport?.id === r.id ? 11 : 8,
+                fillColor: getPinColor(r.status),
+                fillOpacity: 1,
+                strokeColor: selectedReport?.id === r.id ? "#1F2937" : "#ffffff",
+                strokeWeight: selectedReport?.id === r.id ? 3 : 2,
+              }}
+              zIndex={selectedReport?.id === r.id ? 10 : 1}
+              onClick={() => handleMarkerClick(r)}
+            />
+          ))}
+        </GoogleMap>
+
+        {/* Floating controls — bottom right */}
+        <div className="absolute bottom-6 right-4 flex flex-col gap-2 z-10">
+          <button
+            onClick={refresh}
+            title="Recargar reportes"
+            className="w-11 h-11 bg-white rounded-full shadow-lg flex items-center justify-center text-lg hover:bg-gray-50 active:scale-95 transition-all touch-target"
+          >
+            🔄
+          </button>
+          <button
+            onClick={handleGeolocate}
+            title="Mi ubicación"
+            className="w-11 h-11 bg-white rounded-full shadow-lg flex items-center justify-center text-lg hover:bg-gray-50 active:scale-95 transition-all touch-target"
+          >
+            📍
           </button>
         </div>
-      )}
 
-      {/* Google Map */}
-      <GoogleMap
-        mapContainerStyle={{ width: "100%", height: "100%" }}
-        center={DEFAULT_CENTER}
-        zoom={DEFAULT_ZOOM}
-        options={MAP_OPTIONS}
-        onLoad={onMapLoad}
-        onUnmount={onMapUnmount}
-        onClick={() => setSelectedReport(null)}
-      >
-        {filteredReports.map((r) => (
-          <Marker
-            key={r.id}
-            position={{ lat: r.latitude, lng: r.longitude }}
-            icon={{
-              path: window.google.maps.SymbolPath.CIRCLE,
-              scale: selectedReport?.id === r.id ? 11 : 8,
-              fillColor: getPinColor(r.status),
-              fillOpacity: 1,
-              strokeColor: selectedReport?.id === r.id ? "#1F2937" : "#ffffff",
-              strokeWeight: selectedReport?.id === r.id ? 3 : 2,
-            }}
-            zIndex={selectedReport?.id === r.id ? 10 : 1}
-            onClick={() => handleMarkerClick(r)}
+        {/* Report count badge — bottom left */}
+        <div className="absolute bottom-6 left-4 z-10 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow text-xs text-gray-600 font-medium pointer-events-none">
+          {filteredReports.length} reporte{filteredReports.length !== 1 ? "s" : ""}
+          {activeFilter !== "all" && " filtrados"}
+        </div>
+
+        {/* Report preview panel (pin clicked but detail not yet open) */}
+        {selectedReport && !detailReport && (
+          <ReportPreview
+            report={selectedReport}
+            reports={filteredReports}
+            onClose={() => setSelectedReport(null)}
+            onNavigate={handleNavigate}
+            onOpenDetail={() => setDetailReport(selectedReport)}
           />
-        ))}
-      </GoogleMap>
+        )}
 
-      {/* Floating controls — bottom right */}
-      <div className="absolute bottom-6 right-4 flex flex-col gap-2 z-10">
-        <button
-          onClick={refresh}
-          title="Recargar reportes"
-          className="w-11 h-11 bg-white rounded-full shadow-lg flex items-center justify-center text-lg hover:bg-gray-50 active:scale-95 transition-all"
-        >
-          🔄
-        </button>
-        <button
-          onClick={handleGeolocate}
-          title="Mi ubicación"
-          className="w-11 h-11 bg-white rounded-full shadow-lg flex items-center justify-center text-lg hover:bg-gray-50 active:scale-95 transition-all"
-        >
-          📍
-        </button>
+        {/* Report detail drawer (full info + actions) */}
+        {detailReport && (
+          <ReportDetail
+            report={detailReport}
+            reports={filteredReports}
+            isAdmin={isAdmin}
+            onClose={() => setDetailReport(null)}
+            onUpdated={handleUpdated}
+            onDeleted={handleDeleted}
+            onNavigate={handleDetailNavigate}
+          />
+        )}
       </div>
-
-      {/* Report count badge — bottom left */}
-      <div className="absolute bottom-6 left-4 z-10 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow text-xs text-gray-600 font-medium pointer-events-none">
-        {filteredReports.length} reporte{filteredReports.length !== 1 ? "s" : ""}
-        {activeFilter !== "all" && " filtrados"}
-      </div>
-
-      {/* Report preview panel (pin clicked but detail not yet open) */}
-      {selectedReport && !detailReport && (
-        <ReportPreview
-          report={selectedReport}
-          reports={filteredReports}
-          onClose={() => setSelectedReport(null)}
-          onNavigate={handleNavigate}
-          onOpenDetail={() => setDetailReport(selectedReport)}
-        />
-      )}
-
-      {/* Report detail drawer (full info + actions) */}
-      {detailReport && (
-        <ReportDetail
-          report={detailReport}
-          reports={filteredReports}
-          isAdmin={isAdmin}
-          onClose={() => setDetailReport(null)}
-          onUpdated={handleUpdated}
-          onDeleted={handleDeleted}
-          onNavigate={handleDetailNavigate}
-        />
-      )}
     </div>
   );
 }

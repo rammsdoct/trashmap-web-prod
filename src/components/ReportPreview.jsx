@@ -31,7 +31,7 @@ export default function ReportPreview({ report, reports, onClose, onNavigate, on
           <button
             onClick={onClose}
             aria-label="Cerrar"
-            className="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 text-sm transition"
+            className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 text-sm transition touch-target"
           >
             ✕
           </button>
@@ -62,26 +62,29 @@ export default function ReportPreview({ report, reports, onClose, onNavigate, on
         <img
           src={`data:image/jpeg;base64,${report.photoOpen}`}
           alt="Foto del reporte"
-          className="w-full h-36 object-cover rounded-xl"
+          className="w-full h-36 sm:h-44 object-cover rounded-xl"
         />
       )}
 
       {/* Navigation */}
-      <div className="flex items-center gap-2 pt-1">
+      <div className="flex flex-col sm:flex-row items-center gap-2 pt-1">
         <button
           disabled={!hasPrev}
           onClick={() => navigate(-1)}
-          className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition px-2 py-1.5 rounded-lg hover:bg-gray-100"
+          className="w-full sm:flex-1 flex items-center justify-center gap-1 text-xs text-gray-500 hover:text-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition px-2 py-2 sm:py-1.5 rounded-lg hover:bg-gray-100 touch-target"
         >
           ← Anterior
         </button>
-        <button className="flex-1 py-2 bg-[#10B981] hover:bg-[#059669] active:scale-95 text-white text-xs font-semibold rounded-xl transition-all">
-          Ver detalle (W3)
+        <button 
+          onClick={onOpenDetail}
+          className="w-full sm:flex-1 py-2.5 bg-[#10B981] hover:bg-[#059669] active:scale-95 text-white text-xs font-semibold rounded-xl transition-all touch-target"
+        >
+          Ver detalle
         </button>
         <button
           disabled={!hasNext}
           onClick={() => navigate(1)}
-          className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition px-2 py-1.5 rounded-lg hover:bg-gray-100"
+          className="w-full sm:flex-1 flex items-center justify-center gap-1 text-xs text-gray-500 hover:text-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition px-2 py-2 sm:py-1.5 rounded-lg hover:bg-gray-100 touch-target"
         >
           Siguiente →
         </button>
@@ -91,15 +94,15 @@ export default function ReportPreview({ report, reports, onClose, onNavigate, on
 
   return (
     <>
-      {/* Desktop: left panel */}
-      <div className="hidden md:block absolute left-4 top-16 w-80 bg-white rounded-2xl shadow-xl z-10 overflow-y-auto max-h-[calc(100%-5rem)] pointer-events-auto">
+      {/* Tablet+: left panel */}
+      <div className="hidden md:block absolute left-3 lg:left-4 top-16 w-72 lg:w-80 bg-white rounded-2xl shadow-xl z-10 overflow-y-auto max-h-[calc(100%-5rem)] pointer-events-auto">
         <div className="p-4">{content}</div>
       </div>
 
       {/* Mobile: bottom sheet */}
-      <div className="md:hidden absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-2xl z-10 pointer-events-auto slide-up">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl z-10 pointer-events-auto slide-up max-h-[85dvh] overflow-y-auto">
         <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mt-3 mb-0" />
-        <div className="p-4 pb-6">{content}</div>
+        <div className="p-4 pb-8">{content}</div>
       </div>
     </>
   );

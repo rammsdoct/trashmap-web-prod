@@ -19,6 +19,11 @@ body {
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+/* Touch target minimum size (44x44) for mobile */
+.touch-target {
+  @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+}
+
 /* Bottom sheet slide-up animation */
 @keyframes slideUp {
   from { transform: translateY(100%); opacity: 0; }
@@ -32,4 +37,23 @@ body {
   to   { transform: translateX(0);    opacity: 1; }
 }
 .slide-in-right { animation: slideInRight 0.28s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Responsive typography */
+@media (max-width: 640px) {
+  body {
+    font-size: 14px;
+  }
+}
+
+/* High DPI support for images */
+@media (min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  img {
+    image-rendering: -webkit-optimize-contrast;
+  }
+}
 
