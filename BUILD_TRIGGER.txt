@@ -1,2 +1,2 @@
-// W7 Deployment - Firebase API Key Fix
-// Rebuilt at: 2026-04-29 13:13:43
+W7 Deployment - Secrets corrected manually
+Built at: 2026-04-29 13:26:31
